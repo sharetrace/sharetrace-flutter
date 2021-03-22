@@ -1,0 +1,29 @@
+PODS:
+  - Flutter (1.0.0)
+  - sharetrace_flutter_plugin (1.0.3):
+    - Flutter
+    - SharetraceSDK (~> 2.0.0)
+  - SharetraceSDK (2.0.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - sharetrace_flutter_plugin (from `.symlinks/plugins/sharetrace_flutter_plugin/ios`)
+
+SPEC REPOS:
+  trunk:
+    - SharetraceSDK
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  sharetrace_flutter_plugin:
+    :path: ".symlinks/plugins/sharetrace_flutter_plugin/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  sharetrace_flutter_plugin: 4e76ff8c38a1ead4131ce7d25923e77b229ace0b
+  SharetraceSDK: 0927bccea0cd721a05ba360858c26db260b728b4
+
+PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+
+COCOAPODS: 1.10.0
