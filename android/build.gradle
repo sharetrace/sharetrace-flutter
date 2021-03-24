@@ -32,12 +32,6 @@ android {
     }
 }
 
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
-
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.aar'])
+    implementation(name: 'sharetrace-android-sdk_v2.0.7', ext: 'aar')
 }
