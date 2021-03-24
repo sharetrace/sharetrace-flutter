@@ -132,10 +132,10 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         }
 
         String paramsData = (appData.getParamsData() == null) ? "" : appData.getParamsData();
-        String resumePage = (appData.getResumePage() == null) ? "" : appData.getResumePage();
+        // String resumePage = (appData.getResumePage() == null) ? "" : appData.getResumePage();
         String channel = (appData.getChannel() == null) ? "" : appData.getChannel();
 
-        return parseToResult(200, "Success", paramsData, resumePage, channel);
+        return parseToResult(200, "Success", paramsData, "", channel);
     }
 
     private static void wakeupResponse(Map<String, String> ret) {
