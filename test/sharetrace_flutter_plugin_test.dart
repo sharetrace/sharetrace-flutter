@@ -18,6 +18,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await SharetraceFlutterPlugin.platformVersion, '42');
+    expect(await (SharetraceFlutterPlugin as dynamic).platformVersion, '42');
   });
 }
