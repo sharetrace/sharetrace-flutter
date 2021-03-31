@@ -10,7 +10,7 @@
 
 ``` xml
 dependencies:
-  sharetrace_flutter_plugin: ^1.0.3
+  sharetrace_flutter_plugin: ^1.3.0
 ```
 
 #### 1.2 安装
@@ -60,7 +60,6 @@ import 'package:sharetrace_flutter_plugin/sharetrace_flutter_plugin.dart';
            + "code= " + data['code'] + "\n"
            + "msg= " + data['msg'] + "\n"
            + "paramsData= " + data['paramsData'] + "\n"
-           + "resumePage= " + data['resumePage'] + "\n"
            + "channel= " + data['channel'];
     });
   }
@@ -220,7 +219,6 @@ class _MyAppState extends State<MyApp> {
           + "code= " + data['code'] + "\n"
           + "msg= " + data['msg'] + "\n"
           + "paramsData= " + data['paramsData'] + "\n"
-          + "resumePage= " + data['resumePage'] + "\n"
           + "channel= " + data['channel'];
     });
   }

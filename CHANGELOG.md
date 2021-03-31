@@ -1,3 +1,8 @@
+## 1.3.0
+
+- 完善文档，更新Android SDK 2.0.8, iOS SDK 2.2.0
+- 返回数据移除resumePage
+
 ## 1.2.0
 
 完善文档，更新Android SDK 2.0.3
