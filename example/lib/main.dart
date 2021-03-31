@@ -45,7 +45,6 @@ class _MyAppState extends State<MyApp> {
            + "code= " + data['code'] + "\n"
            + "msg= " + data['msg'] + "\n"
            + "paramsData= " + data['paramsData'] + "\n"
-           + "resumePage= " + data['resumePage'] + "\n"
            + "channel= " + data['channel'];
     });
   }
@@ -56,7 +55,6 @@ class _MyAppState extends State<MyApp> {
           + "code= " + data['code'] + "\n"
           + "msg= " + data['msg'] + "\n"
           + "paramsData= " + data['paramsData'] + "\n"
-          + "resumePage= " + data['resumePage'] + "\n"
           + "channel= " + data['channel'];
     });
   }

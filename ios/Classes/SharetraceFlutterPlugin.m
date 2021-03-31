@@ -12,7 +12,6 @@
 static NSString * const key_code = @"code";
 static NSString * const key_msg = @"msg";
 static NSString * const key_paramsData = @"paramsData";
-static NSString * const key_resumePage = @"resumePage";
 static NSString * const key_channel = @"channel";
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar>*)registrar {
@@ -41,7 +40,7 @@ static NSString * const key_channel = @"channel";
                 return;
             }
 
-            NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:200 :@"Success" :appData.paramsData :appData.resumePage];
+            NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:200 :@"Success" :appData.paramsData :appData.channel];
             [self response:ret];
 
         } :^(NSInteger code, NSString * _Nonnull msg) {
@@ -63,17 +62,12 @@ static NSString * const key_channel = @"channel";
     [self.flutterMethodChannel invokeMethod:@"onWakeupResponse" arguments:ret];
 }
 
-+ (NSDictionary*)parseToResultDict:(NSInteger)code :(NSString*)msg :(NSString*)paramsData :(NSString*)resumePage {
-    return [self parseToResultDict:code :msg :paramsData :resumePage :@""];
-}
-
-+ (NSDictionary*)parseToResultDict:(NSInteger)code :(NSString*)msg :(NSString*)paramsData :(NSString*)resumePage :(NSString*)channel {
++ (NSDictionary*)parseToResultDict:(NSInteger)code :(NSString*)msg :(NSString*)paramsData :(NSString*)channel {
     NSMutableDictionary* dict = [[NSMutableDictionary alloc] init];
 
     dict[key_code] = [[NSNumber numberWithInteger:code] stringValue];
     dict[key_msg] = msg;
     dict[key_paramsData] = paramsData;
-    dict[key_resumePage] = resumePage;
     dict[key_channel] = channel;
 
     return dict;
@@ -81,7 +75,7 @@ static NSString * const key_channel = @"channel";
 
 - (void)getWakeUpTrace:(AppData *)appData {
     if (appData != nil) {
-        NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:200 :@"Success" :appData.paramsData :appData.resumePage :appData.channel];
+        NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:200 :@"Success" :appData.paramsData :appData.channel];
         [self wakeupResponse:ret];
     }
 }

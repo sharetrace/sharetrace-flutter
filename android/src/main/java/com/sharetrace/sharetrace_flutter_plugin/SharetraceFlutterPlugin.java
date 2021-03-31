@@ -39,7 +39,6 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
     private static final String KEY_CODE = "code";
     private static final String KEY_MSG = "msg";
     private static final String KEY_PARAMSDATA = "paramsData";
-    private static final String KEY_RESUMEPAGE = "resumePage";
     private static final String KEY_CHANNEL = "channel";
 
     @Override
@@ -100,7 +99,7 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
                 @Override
                 public void onInstall(AppData appData) {
                     if (appData == null) {
-                        Map<String, String> ret = parseToResult(-1, "Extract data fail.", "", "", "");
+                        Map<String, String> ret = parseToResult(-1, "Extract data fail.", "", "");
                         installResponse(ret);
                         return;
                     }
@@ -110,7 +109,7 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
 
                 @Override
                 public void onError(int code, String message) {
-                    Map<String, String> ret = parseToResult(code, message, "", "", "");
+                    Map<String, String> ret = parseToResult(code, message, "", "");
                     installResponse(ret);
                 }
             });
@@ -132,10 +131,9 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         }
 
         String paramsData = (appData.getParamsData() == null) ? "" : appData.getParamsData();
-        String resumePage = (appData.getResumePage() == null) ? "" : appData.getResumePage();
         String channel = (appData.getChannel() == null) ? "" : appData.getChannel();
 
-        return parseToResult(200, "Success", paramsData, resumePage, channel);
+        return parseToResult(200, "Success", paramsData, channel);
     }
 
     private static void wakeupResponse(Map<String, String> ret) {
@@ -152,12 +150,11 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         channel.invokeMethod("onInstallResponse", ret);
     }
 
-    private static Map<String, String> parseToResult(int code, String msg, String paramsData, String resumePage, String channel) {
+    private static Map<String, String> parseToResult(int code, String msg, String paramsData, String channel) {
         Map<String, String> result = new HashMap<>();
         result.put(KEY_CODE, String.valueOf(code));
         result.put(KEY_MSG, msg);
         result.put(KEY_PARAMSDATA, paramsData);
-        result.put(KEY_RESUMEPAGE, resumePage);
         result.put(KEY_CHANNEL, channel);
         return result;
     }
