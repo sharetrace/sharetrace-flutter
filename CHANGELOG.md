@@ -1,3 +1,7 @@
+## 1.3.1
+
+- Gradle build toos version 4.1.0
+
 ## 1.3.0
 
 - 完善文档，更新Android SDK 2.0.8, iOS SDK 2.2.0
