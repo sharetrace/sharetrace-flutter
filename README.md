@@ -10,7 +10,7 @@
 
 ``` xml
 dependencies:
-  sharetrace_flutter_plugin: ^1.3.0
+  sharetrace_flutter_plugin: ^1.4.0
 ```
 
 #### 1.2 安装
@@ -107,6 +107,10 @@ Sharetrace支持通过标准的Scheme和Universal Links(iOS>=9)，接入Sharetra
 ![ios_scheme_value.png](https://res.sharetrace.com/img/ios_scheme_value.png)
 
 #### 4.4 代码配置
+
+从Sharetrace flutter plugin 1.4.0 开始，一键调起逻辑由插件内部处理以解决与其他插件冲突的问题，则可以跳过该步骤。
+
+若plugin版本 < 1.4.0，依然需要在AppDelegate进行配置，如下所示:
 
 ##### iOS 配置
 找到AppDelegate文件，参考以下配置

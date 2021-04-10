@@ -1,3 +1,7 @@
+## 1.4.0
+
+- 修正iOS无法调起问题以及避免与其他插件冲突
+
 ## 1.3.1
 
 - Gradle build toos version 4.1.0
