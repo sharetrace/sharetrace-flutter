@@ -1,10 +1,14 @@
 ## 1.4.0
 
+- 更新Android SDK 2.1.0, iOS SDK 2.3.0
+
+## 1.4.0
+
 - 修正iOS无法调起问题以及避免与其他插件冲突
 
 ## 1.3.1
 
-- Gradle build toos version 4.1.0
+- Gradle build tools version 4.1.0
 
 ## 1.3.0
 

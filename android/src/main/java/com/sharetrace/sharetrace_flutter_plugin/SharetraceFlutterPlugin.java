@@ -3,6 +3,8 @@ package com.sharetrace.sharetrace_flutter_plugin;
 import android.app.Activity;
 import android.app.Application;
 import android.content.Intent;
+import android.text.TextUtils;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -32,6 +34,7 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
+    private static final String TAG = "SharetraceFlutterPlugin";
     private static MethodChannel channel;
     private static AppData cacheAppData = null;
     private static boolean hasWakeupRegisted = false;
@@ -71,14 +74,14 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         }
     }
 
-    private static PluginRegistry.NewIntentListener newIntentListener = new PluginRegistry.NewIntentListener() {
+    private static final PluginRegistry.NewIntentListener newIntentListener = new PluginRegistry.NewIntentListener() {
         @Override
         public boolean onNewIntent(Intent intent) {
             return ShareTrace.getWakeUpTrace(intent, shareTraceWakeUpListener);
         }
     };
 
-    private static ShareTraceWakeUpListener shareTraceWakeUpListener = new ShareTraceWakeUpListener() {
+    private static final ShareTraceWakeUpListener shareTraceWakeUpListener = new ShareTraceWakeUpListener() {
         @Override
         public void onWakeUp(AppData appData) {
             if (hasWakeupRegisted) {
@@ -95,6 +98,21 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
         if (call.method.equals("getInstallTrace")) {
             result.success("call getInstallTrace success.");
+            int defaultTimeout = 10;
+
+            try {
+                String timeoutSeconds = call.argument("timeoutSeconds");
+                if (timeoutSeconds != null && !TextUtils.isEmpty(timeoutSeconds)) {
+                    int timeout = Integer.parseInt(timeoutSeconds);
+                    if (timeout > 0) {
+                        defaultTimeout = timeout;
+                    }
+                }
+            } catch (Throwable e) {
+                // ignore
+                Log.d(TAG, "timeoutSeconds parsed error: " + e.getMessage());
+            }
+
             ShareTrace.getInstallTrace(new ShareTraceInstallListener() {
                 @Override
                 public void onInstall(AppData appData) {
@@ -112,7 +130,7 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
                     Map<String, String> ret = parseToResult(code, message, "", "");
                     installResponse(ret);
                 }
-            });
+            }, defaultTimeout);
         } else if (call.method.equals("registerWakeup")) {
             hasWakeupRegisted = true;
             if (cacheAppData != null) {

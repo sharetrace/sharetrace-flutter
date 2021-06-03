@@ -74,7 +74,7 @@ class _MyAppState extends State<MyApp> {
               const SizedBox(height: 30),
               RaisedButton(
                 onPressed: () {
-                  _sharetraceFlutterPlugin.getInstallTrace(responseHandler);
+                  _sharetraceFlutterPlugin.getInstallTrace(responseHandler, 12);
                 },
                 child: Text('getInstallTrace', style: TextStyle(fontSize: 20)),
               )

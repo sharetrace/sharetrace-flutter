@@ -5,6 +5,7 @@ buildscript {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -16,6 +17,7 @@ rootProject.allprojects {
     repositories {
         google()
         jcenter()
+        mavenCentral()
     }
 }
 
@@ -40,4 +42,5 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar'])
+    implementation 'com.sharetrace:sharetrace-android-sdk:2.1.0'
 }

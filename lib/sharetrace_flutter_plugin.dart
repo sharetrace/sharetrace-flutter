@@ -45,8 +45,9 @@ class SharetraceFlutterPlugin {
     _channel.invokeMethod("registerWakeup");
   }
 
-  void getInstallTrace(ResponseHandler responseHandler) {
+  void getInstallTrace(ResponseHandler responseHandler, [int timeoutSeconds = 10]) {
     var args = new Map();
+    args["timeoutSeconds"] = timeoutSeconds.toString();
     this._installRespHandler = responseHandler;
     _channel.invokeMethod("getInstallTrace", args);
   }

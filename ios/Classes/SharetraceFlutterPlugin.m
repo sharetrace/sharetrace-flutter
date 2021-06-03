@@ -37,7 +37,19 @@ static NSString * const key_channel = @"channel";
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"getInstallTrace" isEqualToString:call.method]) {
-        [Sharetrace getInstallTrace:^(AppData * _Nullable appData) {
+        NSTimeInterval timeout = 10;
+        if (call.arguments != nil) {
+            id timeoutSeconds = call.arguments[@"timeoutSeconds"];
+            if (timeoutSeconds != nil) {
+                NSString *targetTime = [NSString stringWithString:timeoutSeconds];
+                NSTimeInterval targetTimeInterval  = [targetTime doubleValue];
+                if (targetTimeInterval > 0) {
+                    timeout = targetTimeInterval;
+                }
+            }
+        }
+        NSTimeInterval targetTimeout = timeout * 1000;
+        [Sharetrace getInstallTraceWithTimeout:targetTimeout success:^(AppData * _Nullable appData) {
             if (appData == nil) {
                 NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:-1 :@"Extract data fail." :@"" :@""];
                 [self response:ret];
@@ -46,8 +58,7 @@ static NSString * const key_channel = @"channel";
 
             NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:200 :@"Success" :appData.paramsData :appData.channel];
             [self response:ret];
-
-        } :^(NSInteger code, NSString * _Nonnull msg) {
+        } fail:^(NSInteger code, NSString * _Nonnull msg) {
             NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:code :msg :@"" :@""];
             [self response:ret];
         }];
