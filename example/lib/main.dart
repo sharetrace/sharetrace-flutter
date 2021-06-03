@@ -14,8 +14,8 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String result;
-  SharetraceFlutterPlugin _sharetraceFlutterPlugin;
+  String result = "";
+  late SharetraceFlutterPlugin _sharetraceFlutterPlugin;
 
   @override
   void initState() {
@@ -42,20 +42,20 @@ class _MyAppState extends State<MyApp> {
   Future responseHandler(Map<String, String> data) async {
     setState(() {
       result = "getInstallTrace: \n\n"
-           + "code= " + data['code'] + "\n"
-           + "msg= " + data['msg'] + "\n"
-           + "paramsData= " + data['paramsData'] + "\n"
-           + "channel= " + data['channel'];
+           + "code= " + data['code'].toString() + "\n"
+           + "msg= " + data['msg'].toString() + "\n"
+           + "paramsData= " + data['paramsData'].toString() + "\n"
+           + "channel= " + data['channel'].toString();
     });
   }
 
   Future wakeupHandler(Map<String, String> data) async {
     setState(() {
       result = "wakeupTrace: \n\n"
-          + "code= " + data['code'] + "\n"
-          + "msg= " + data['msg'] + "\n"
-          + "paramsData= " + data['paramsData'] + "\n"
-          + "channel= " + data['channel'];
+          + "code= " + data['code'].toString() + "\n"
+          + "msg= " + data['msg'].toString() + "\n"
+          + "paramsData= " + data['paramsData'].toString() + "\n"
+          + "channel= " + data['channel'].toString();
     });
   }
 

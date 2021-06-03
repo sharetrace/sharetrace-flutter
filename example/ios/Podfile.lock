@@ -20,7 +20,7 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sharetrace_flutter_plugin/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
   sharetrace_flutter_plugin: d30bf85f8feec9729e434b99d21370ef984e3e3a
   SharetraceSDK: a2da8d8776554c688d219633a0e740cacda90f78
 

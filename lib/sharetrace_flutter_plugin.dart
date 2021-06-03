@@ -8,35 +8,24 @@ typedef Future<dynamic> ResponseHandler(Map<String, String> data);
 class SharetraceFlutterPlugin {
   static const MethodChannel _channel = const MethodChannel('sharetrace_flutter_plugin');
 
-  static SharetraceFlutterPlugin _instance;
+  static final SharetraceFlutterPlugin _instance = SharetraceFlutterPlugin._internal();
   SharetraceFlutterPlugin._internal() {
     _channel.setMethodCallHandler(_onMethodHandle);
   }
   factory SharetraceFlutterPlugin.getInstance() => _getInstance();
 
   static _getInstance() {
-    if (_instance == null) {
-      _instance = SharetraceFlutterPlugin._internal();
-    }
     return _instance;
   }
 
-  Future defaultHandler() async {}
+  late ResponseHandler _installRespHandler;
+  late ResponseHandler _wakeupRespHandler;
 
-  ResponseHandler _installRespHandler;
-  ResponseHandler _wakeupRespHandler;
-
-  Future<Null> _onMethodHandle(MethodCall call) async {
+  Future _onMethodHandle(MethodCall call) async {
     if (call.method == "onInstallResponse") {
-      if (_installRespHandler != null) {
-        return _installRespHandler(call.arguments.cast<String, String>());
-      }
-      return defaultHandler();
+      return _installRespHandler(call.arguments.cast<String, String>());
     } else if (call.method == "onWakeupResponse") {
-      if (_wakeupRespHandler != null) {
-        return _wakeupRespHandler(call.arguments.cast<String, String>());
-      }
-      return defaultHandler();
+      return _wakeupRespHandler(call.arguments.cast<String, String>());
     }
   }
 

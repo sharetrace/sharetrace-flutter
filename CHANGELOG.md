@@ -1,3 +1,7 @@
+## 2.0.0
+
+- 增加null safety支持
+
 ## 1.5.0
 
 - 更新Android SDK 2.1.0, iOS SDK 2.3.0
