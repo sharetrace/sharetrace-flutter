@@ -1,3 +1,7 @@
+## 2.0.1
+
+- 修正Android SDK timeout设置错误问题
+
 ## 2.0.0
 
 - 增加null safety支持
