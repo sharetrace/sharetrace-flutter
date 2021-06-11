@@ -130,7 +130,7 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
                     Map<String, String> ret = parseToResult(code, message, "", "");
                     installResponse(ret);
                 }
-            }, defaultTimeout);
+            }, defaultTimeout * 1000);
         } else if (call.method.equals("registerWakeup")) {
             hasWakeupRegisted = true;
             if (cacheAppData != null) {
