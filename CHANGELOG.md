@@ -1,3 +1,7 @@
+## 1.5.3
+
+- 更新Android SDK 2.1.2
+
 ## 1.5.2
 
 - 更新Android SDK 2.1.1, 优化Android请求性能
