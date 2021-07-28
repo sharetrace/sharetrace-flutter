@@ -1,5 +1,9 @@
 ## 2.0.3
 
+- (Flutter 2.x) 更新Android SDK 2.1.3
+
+## 2.0.3
+
 - (Flutter 2.x) 更新Android SDK 2.1.2
 
 ## 2.0.2
@@ -13,6 +17,10 @@
 ## 2.0.0
 
 - 增加null safety支持
+
+## 1.5.4
+
+- 更新Android SDK 2.1.3
 
 ## 1.5.3
 
