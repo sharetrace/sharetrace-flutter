@@ -1,4 +1,8 @@
-## 2.0.4
+## 2.0.6
+
+- (Flutter 2.x) 更新Android SDK 2.1.4
+
+## 2.0.5
 
 - (Flutter 2.x) 更新iOS SDK 2.3.2
 
