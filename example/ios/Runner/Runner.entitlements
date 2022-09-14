@@ -5,6 +5,7 @@
 	<key>com.apple.developer.associated-domains</key>
 	<array>
 		<string>applinks:8a9392dc41de5dca.stul.sharetrace.com</string>
+		<string>applinks:8a9392dc41de5dca.stul.sharetrace.com?mode=developer</string>
 	</array>
 </dict>
 </plist>

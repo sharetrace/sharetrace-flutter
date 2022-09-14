@@ -32,6 +32,7 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     _sharetraceFlutterPlugin = SharetraceFlutterPlugin.getInstance();
+    _sharetraceFlutterPlugin.init();
     _sharetraceFlutterPlugin.registerWakeupHandler(wakeupHandler);
 
     setState(() {

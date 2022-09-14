@@ -41,4 +41,8 @@ class SharetraceFlutterPlugin {
     _channel.invokeMethod("getInstallTrace", args);
   }
 
+  void init() {
+    _channel.invokeMethod("init");
+  }
+
 }

@@ -1,7 +1,7 @@
 package com.sharetrace.sharetrace_flutter_plugin;
 
-import android.app.Activity;
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
@@ -15,7 +15,6 @@ import cn.net.shoot.sharetracesdk.AppData;
 import cn.net.shoot.sharetracesdk.ShareTrace;
 import cn.net.shoot.sharetracesdk.ShareTraceInstallListener;
 import cn.net.shoot.sharetracesdk.ShareTraceWakeUpListener;
-import io.flutter.embedding.engine.FlutterEngine;
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
@@ -24,20 +23,25 @@ import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
-import io.flutter.plugin.common.PluginRegistry.Registrar;
 
 /**
  * SharetraceFlutterPlugin
  */
-public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware {
+public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler, ActivityAware, PluginRegistry.NewIntentListener {
     /// The MethodChannel that will the communication between Flutter and native Android
     ///
     /// This local reference serves to register the plugin with the Flutter Engine and unregister it
     /// when the Flutter Engine is detached from the Activity
     private static final String TAG = "SharetraceFlutterPlugin";
-    private static MethodChannel channel;
-    private static AppData cacheAppData = null;
-    private static boolean hasWakeupRegisted = false;
+
+    private static final String METHOD_GET_INSTALL_TRACE = "getInstallTrace";
+    private static final String METHOD_REGISTER_WAKEUP = "registerWakeup";
+    private static final String METHOD_INIT = "init";
+
+    private MethodChannel channel;
+    private boolean hasInited;
+    private Intent cacheIntent;
+    private FlutterPluginBinding cacheFlutterPluginBinding;
 
     private static final String KEY_CODE = "code";
     private static final String KEY_MSG = "msg";
@@ -46,57 +50,14 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
 
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        FlutterEngine flutterEngine = flutterPluginBinding.getFlutterEngine();
-        channel = new MethodChannel(flutterEngine.getDartExecutor(), "sharetrace_flutter_plugin");
+        cacheFlutterPluginBinding = flutterPluginBinding;
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "sharetrace_flutter_plugin");
         channel.setMethodCallHandler(this);
-        ShareTrace.init((Application) flutterPluginBinding.getApplicationContext());
     }
-
-    // This static function is optional and equivalent to onAttachedToEngine. It supports the old
-    // pre-Flutter-1.12 Android projects. You are encouraged to continue supporting
-    // plugin registration via this function while apps migrate to use the new Android APIs
-    // post-flutter-1.12 via https://flutter.dev/go/android-project-migration.
-    //
-    // It is encouraged to share logic between onAttachedToEngine and registerWith to keep
-    // them functionally equivalent. Only one of onAttachedToEngine or registerWith will be called
-    // depending on the user's project. onAttachedToEngine or registerWith must both be defined
-    // in the same class.
-    public static void registerWith(Registrar registrar) {
-        channel = new MethodChannel(registrar.messenger(), "sharetrace_flutter_plugin");
-        channel.setMethodCallHandler(new SharetraceFlutterPlugin());
-        ShareTrace.init((Application) registrar.context());
-
-        registrar.addNewIntentListener(newIntentListener);
-
-        Activity activity = registrar.activity();
-        if (activity != null) {
-            ShareTrace.getWakeUpTrace(activity.getIntent(), shareTraceWakeUpListener);
-        }
-    }
-
-    private static final PluginRegistry.NewIntentListener newIntentListener = new PluginRegistry.NewIntentListener() {
-        @Override
-        public boolean onNewIntent(Intent intent) {
-            return ShareTrace.getWakeUpTrace(intent, shareTraceWakeUpListener);
-        }
-    };
-
-    private static final ShareTraceWakeUpListener shareTraceWakeUpListener = new ShareTraceWakeUpListener() {
-        @Override
-        public void onWakeUp(AppData appData) {
-            if (hasWakeupRegisted) {
-                Map<String, String> ret = parseToSuccessMap(appData);
-                wakeupResponse(ret);
-                cacheAppData = null;
-            } else {
-                cacheAppData = appData;
-            }
-        }
-    };
 
     @Override
     public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-        if (call.method.equals("getInstallTrace")) {
+        if (call.method.equalsIgnoreCase(METHOD_GET_INSTALL_TRACE)) {
             result.success("call getInstallTrace success.");
             int defaultTimeout = 10;
 
@@ -131,15 +92,26 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
                     installResponse(ret);
                 }
             }, defaultTimeout * 1000);
-        } else if (call.method.equals("registerWakeup")) {
-            hasWakeupRegisted = true;
-            if (cacheAppData != null) {
-                Map<String, String> ret = parseToSuccessMap(cacheAppData);
-                wakeupResponse(ret);
-            }
+        } else if (call.method.equalsIgnoreCase(METHOD_REGISTER_WAKEUP)) {
             result.success("call registerWakeup success");
+        } else if (call.method.equalsIgnoreCase(METHOD_INIT)) {
+            init();
+            result.success("call init success");
         } else {
             result.notImplemented();
+        }
+    }
+
+    private void init() {
+        if (cacheFlutterPluginBinding == null) {
+            return;
+        }
+        hasInited = true;
+        Context applicationContext = cacheFlutterPluginBinding.getApplicationContext();
+        ShareTrace.init((Application) applicationContext);
+        if (cacheIntent != null) {
+            processWakeUp(cacheIntent);
+            cacheIntent = null;
         }
     }
 
@@ -154,14 +126,14 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         return parseToResult(200, "Success", paramsData, channel);
     }
 
-    private static void wakeupResponse(Map<String, String> ret) {
+    private void wakeupResponse(Map<String, String> ret) {
         if (channel == null) {
             return;
         }
         channel.invokeMethod("onWakeupResponse", ret);
     }
 
-    private static void installResponse(Map<String, String> ret) {
+    private void installResponse(Map<String, String> ret) {
         if (channel == null) {
             return;
         }
@@ -177,6 +149,25 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         return result;
     }
 
+    private void processWakeUp(Intent intent) {
+        if (intent == null) {
+            return;
+        }
+
+        if (!hasInited) {
+            cacheIntent = intent;
+            return;
+        }
+
+        ShareTrace.getWakeUpTrace(intent, new ShareTraceWakeUpListener() {
+            @Override
+            public void onWakeUp(AppData appData) {
+                final Map<String, String> ret = parseToSuccessMap(appData);
+                wakeupResponse(ret);
+            }
+        });
+    }
+
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
         channel.setMethodCallHandler(null);
@@ -184,12 +175,9 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+        binding.addOnNewIntentListener(this);
         Intent intent = binding.getActivity().getIntent();
-        if (intent != null) {
-            ShareTrace.getWakeUpTrace(intent, shareTraceWakeUpListener);
-        }
-
-        binding.addOnNewIntentListener(newIntentListener);
+        processWakeUp(intent);
     }
 
     @Override
@@ -198,9 +186,16 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+        binding.addOnNewIntentListener(this);
     }
 
     @Override
     public void onDetachedFromActivity() {
+    }
+
+    @Override
+    public boolean onNewIntent(Intent intent) {
+        processWakeUp(intent);
+        return false;
     }
 }

@@ -10,7 +10,7 @@
 
 ``` xml
 dependencies:
-  sharetrace_flutter_plugin: ^2.0.6
+  sharetrace_flutter_plugin: ^3.0.0
 ```
 
 #### 1.2 安装
@@ -49,6 +49,14 @@ flutter pub get
 
 ```dart
 import 'package:sharetrace_flutter_plugin/sharetrace_flutter_plugin.dart';
+```
+##### 3.1. 初始化
+
+> **注意：从sharetrace_flutter_plugin 3.0.0开始，需要主动调用init()来初始化Sharetrace SDK**
+
+```dart
+SharetraceFlutterPlugin _sharetraceFlutterPlugin = SharetraceFlutterPlugin.getInstance();
+_sharetraceFlutterPlugin.init();
 ```
 
 #### 3.2. 定义结果回调

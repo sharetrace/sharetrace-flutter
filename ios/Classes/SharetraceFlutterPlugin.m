@@ -3,11 +3,14 @@
 
 @interface SharetraceFlutterPlugin ()<SharetraceDelegate>
 
-@property (strong, nonatomic) FlutterMethodChannel * flutterMethodChannel;
-
+@property (strong, nonatomic)FlutterMethodChannel * flutterMethodChannel;
 @property (nonatomic, strong)NSDictionary *wakeUpTraceDict;
-@property (nonatomic, assign)BOOL hasLoad;
+@property (nonatomic, assign)BOOL hasRegisterWakeUp;
+@property (nonatomic, assign)BOOL hasInit;
+@property (nonatomic, strong)NSURL *cacheSchemeLinkURL;
+@property (nonatomic, strong)NSUserActivity *cacheUserActivity;
 
++ (id<SharetraceDelegate> _Nonnull)allocWithZone:(NSZone *_Nullable)zone;
 @end
 
 @implementation SharetraceFlutterPlugin
@@ -21,22 +24,45 @@ static NSString * const key_channel = @"channel";
     FlutterMethodChannel* channel = [FlutterMethodChannel
                                      methodChannelWithName:@"sharetrace_flutter_plugin"
                                      binaryMessenger:[registrar messenger]];
-    SharetraceFlutterPlugin* instance = [[SharetraceFlutterPlugin alloc] init];
+    SharetraceFlutterPlugin* instance = [SharetraceFlutterPlugin allocWithZone:nil];
     [registrar addApplicationDelegate:instance];
     instance.flutterMethodChannel = channel;
     [registrar addMethodCallDelegate:instance channel:channel];
 }
 
-- (instancetype)init {
-    self = [super init];
-    if (self) {
-        [Sharetrace initWithDelegate:self];
++ (id)allocWithZone:(NSZone *)zone {
+    static SharetraceFlutterPlugin *sharedInstance = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sharedInstance = [super allocWithZone:zone];
+        sharedInstance.wakeUpTraceDict = [[NSDictionary alloc] init];
+    });
+    return sharedInstance;
+}
+
++ (void)initSharetrace {
+    SharetraceFlutterPlugin * _Nonnull module = [SharetraceFlutterPlugin allocWithZone:nil];
+    if (module.hasInit) {
+        return;
     }
-    return self;
+    
+    module.hasInit = YES;
+    [Sharetrace initWithDelegate:module];
+    
+    if (module.cacheSchemeLinkURL != nil) {
+        [Sharetrace handleSchemeLinkURL:module.cacheSchemeLinkURL];
+        module.cacheSchemeLinkURL = nil;
+    }
+    
+    if (module.cacheUserActivity != nil) {
+        [Sharetrace handleUniversalLink:module.cacheUserActivity];
+        module.cacheUserActivity = nil;
+    }
 }
 
 - (void)handleMethodCall:(FlutterMethodCall*)call result:(FlutterResult)result {
     if ([@"getInstallTrace" isEqualToString:call.method]) {
+        [SharetraceFlutterPlugin initSharetrace];
         NSTimeInterval timeout = 10;
         if (call.arguments != nil) {
             id timeoutSeconds = call.arguments[@"timeoutSeconds"];
@@ -63,11 +89,15 @@ static NSString * const key_channel = @"channel";
             [self response:ret];
         }];
     } else if ([@"registerWakeup" isEqualToString:call.method]) {
-        self.hasLoad = YES;
-        if (self.wakeUpTraceDict != nil && self.wakeUpTraceDict.count > 0) {
-            [self wakeupResponse:self.wakeUpTraceDict];
-            self.wakeUpTraceDict = nil;
+        if (!self.hasRegisterWakeUp) {
+            if (self.wakeUpTraceDict != nil && self.wakeUpTraceDict.count != 0) {
+                [self wakeupResponse:self.wakeUpTraceDict];
+                self.wakeUpTraceDict = nil;
+            }
+            self.hasRegisterWakeUp = YES;
         }
+    } else if ([@"init" isEqualToString:call.method]) {
+        [SharetraceFlutterPlugin initSharetrace];
     } else {
         result(FlutterMethodNotImplemented);
     }
@@ -99,11 +129,11 @@ static NSString * const key_channel = @"channel";
     
     NSDictionary *ret = [SharetraceFlutterPlugin parseToResultDict:200 :@"Success" :appData.paramsData :appData.channel];
     
-    if (self.hasLoad) {
+    if (self.hasRegisterWakeUp) {
         [self wakeupResponse:ret];
         self.wakeUpTraceDict = nil;
     } else {
-        @synchronized(self){
+        @synchronized(self) {
             self.wakeUpTraceDict = ret;
         }
     }
@@ -115,26 +145,53 @@ static NSString * const key_channel = @"channel";
 }
 
 - (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)url {
-    [Sharetrace handleSchemeLinkURL:url];
+    SharetraceFlutterPlugin * _Nonnull module = [SharetraceFlutterPlugin allocWithZone:nil];
+    if (module.hasInit) {
+        [Sharetrace handleSchemeLinkURL:url];
+    } else {
+        module.cacheSchemeLinkURL = url;
+    }
     return NO;
 }
 
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
-    [Sharetrace handleSchemeLinkURL:url];
+    SharetraceFlutterPlugin * _Nonnull module = [SharetraceFlutterPlugin allocWithZone:nil];
+    if (module.hasInit) {
+        [Sharetrace handleSchemeLinkURL:url];
+    } else {
+        module.cacheSchemeLinkURL = url;
+    }
     return NO;
 }
 
 - (BOOL)application:(UIApplication*)application continueUserActivity:(NSUserActivity*)userActivity restorationHandler:(void (^)(NSArray*))restorationHandler {
-    [Sharetrace handleUniversalLink:userActivity];
+    SharetraceFlutterPlugin * _Nonnull module = [SharetraceFlutterPlugin allocWithZone:nil];
+    if (module.hasInit) {
+        [Sharetrace handleUniversalLink:userActivity];
+    } else {
+        module.cacheUserActivity = userActivity;
+    }
     return NO;
 }
 
 + (BOOL)handleSchemeLinkURL:(NSURL * _Nullable)url {
-    return [Sharetrace handleSchemeLinkURL:url];
+    SharetraceFlutterPlugin * _Nonnull module = [SharetraceFlutterPlugin allocWithZone:nil];
+    if (module.hasInit) {
+        return [Sharetrace handleSchemeLinkURL:url];
+    } else {
+        module.cacheSchemeLinkURL = url;
+        return NO;
+    }
 }
 
 + (BOOL)handleUniversalLink:(NSUserActivity * _Nullable)userActivity {
-    return [Sharetrace handleUniversalLink:userActivity];
+    SharetraceFlutterPlugin * _Nonnull module = [SharetraceFlutterPlugin allocWithZone:nil];
+    if (module.hasInit) {
+        return [Sharetrace handleUniversalLink:userActivity];
+    } else {
+        module.cacheUserActivity = userActivity;
+        return NO;
+    }
 }
 
 @end

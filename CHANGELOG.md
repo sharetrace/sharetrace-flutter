@@ -1,3 +1,8 @@
+## 3.0.0
+
+- 修改 Sharetrace SDK 初始化时机由接入方控制
+- (Flutter 2.x) 更新Android SDK 2.1.8
+
 ## 2.0.6
 
 - (Flutter 2.x) 更新Android SDK 2.1.4
