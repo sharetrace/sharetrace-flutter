@@ -98,6 +98,8 @@ static NSString * const key_channel = @"channel";
         }
     } else if ([@"init" isEqualToString:call.method]) {
         [SharetraceFlutterPlugin initSharetrace];
+    } else if ([@"disableClipboard" isEqualToString:call.method]) {
+        [Sharetrace disableClipboard];
     } else {
         result(FlutterMethodNotImplemented);
     }

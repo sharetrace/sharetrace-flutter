@@ -36,6 +36,7 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
 
     private static final String METHOD_GET_INSTALL_TRACE = "getInstallTrace";
     private static final String METHOD_REGISTER_WAKEUP = "registerWakeup";
+    private static final String METHOD_DISABLE_CLIPBOARD = "disableClipboard";
     private static final String METHOD_INIT = "init";
 
     private MethodChannel channel;
@@ -97,6 +98,9 @@ public class SharetraceFlutterPlugin implements FlutterPlugin, MethodCallHandler
         } else if (call.method.equalsIgnoreCase(METHOD_INIT)) {
             init();
             result.success("call init success");
+        } else if (call.method.equalsIgnoreCase(METHOD_DISABLE_CLIPBOARD)) {
+            ShareTrace.disableClipboard();
+            result.success("call disableClipboard success");
         } else {
             result.notImplemented();
         }

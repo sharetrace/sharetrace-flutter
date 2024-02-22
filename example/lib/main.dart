@@ -32,6 +32,8 @@ class _MyAppState extends State<MyApp> {
     if (!mounted) return;
 
     _sharetraceFlutterPlugin = SharetraceFlutterPlugin.getInstance();
+    // 设置SharetraceSDK不访问系统剪切板，需要再init之前调用
+    // _sharetraceFlutterPlugin.disableClipboard();
     _sharetraceFlutterPlugin.init();
     _sharetraceFlutterPlugin.registerWakeupHandler(wakeupHandler);
 

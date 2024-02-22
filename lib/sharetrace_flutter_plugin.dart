@@ -45,4 +45,8 @@ class SharetraceFlutterPlugin {
     _channel.invokeMethod("init");
   }
 
+  void disableClipboard() {
+    _channel.invokeMethod("disableClipboard");
+  }
+
 }
