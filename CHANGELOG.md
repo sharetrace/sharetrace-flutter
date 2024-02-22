@@ -1,3 +1,8 @@
+## 3.1.0
+
+- 增加禁用访问系统剪切板接口
+- (Flutter 2.x) 更新Android SDK 2.1.9，iOS SDK 2.3.4
+
 ## 3.0.0
 
 - 修改 Sharetrace SDK 初始化时机由接入方控制
