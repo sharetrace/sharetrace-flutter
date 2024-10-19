@@ -1,3 +1,8 @@
+## 3.2.0
+
+- iOS SDK 去掉Bitcode
+- (Flutter 2.x) iOS SDK 2.4.0
+
 ## 3.1.0
 
 - 增加禁用访问系统剪切板接口
