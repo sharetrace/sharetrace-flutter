@@ -1,9 +1,9 @@
 PODS:
   - Flutter (1.0.0)
-  - sharetrace_flutter_plugin (1.0.6):
+  - sharetrace_flutter_plugin (1.0.7):
     - Flutter
-    - SharetraceSDK (~> 2.4.0)
-  - SharetraceSDK (2.4.0)
+    - SharetraceSDK (~> 2.4.2)
+  - SharetraceSDK (2.4.2)
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
@@ -20,10 +20,10 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/sharetrace_flutter_plugin/ios"
 
 SPEC CHECKSUMS:
-  Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  sharetrace_flutter_plugin: 00e9966eb9070d5842d9a22e96eebf1a2c4b64bc
-  SharetraceSDK: 731fa96604b3af44de4504624b981000acfad18d
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  sharetrace_flutter_plugin: 7439e30c3c2088aafdb43031d151cab2acb5be31
+  SharetraceSDK: 3fedad31b746ccffd43022bb98078e99eb97dff4
 
-PODFILE CHECKSUM: 8e679eca47255a8ca8067c4c67aab20e64cb974d
+PODFILE CHECKSUM: cf0c950f7e9a456b4e325f5b8fc0f98906a3705a
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.11.3

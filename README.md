@@ -10,7 +10,7 @@
 
 ``` xml
 dependencies:
-  sharetrace_flutter_plugin: ^3.0.0
+  sharetrace_flutter_plugin: ^3.3.0
 ```
 
 #### 1.2 安装
