@@ -50,7 +50,7 @@ flutter pub get
 ```dart
 import 'package:sharetrace_flutter_plugin/sharetrace_flutter_plugin.dart';
 ```
-##### 3.1. 初始化
+##### 3.2. 初始化
 
 > **注意：从sharetrace_flutter_plugin 3.0.0开始，需要主动调用init()来初始化Sharetrace SDK**
 
@@ -59,7 +59,7 @@ SharetraceFlutterPlugin _sharetraceFlutterPlugin = SharetraceFlutterPlugin.getIn
 _sharetraceFlutterPlugin.init();
 ```
 
-#### 3.2. 定义结果回调
+#### 3.3. 定义结果回调
 
 ```dart
   Future responseHandler(Map<String, String> data) async {
@@ -73,7 +73,7 @@ _sharetraceFlutterPlugin.init();
   }
 ```
 
-#### 3.3. 请求获取参数
+#### 3.4. 请求获取参数
 ```dart
     SharetraceFlutterPlugin _sharetraceFlutterPlugin = SharetraceFlutterPlugin.getInstance();
     _sharetraceFlutterPlugin.getInstallTrace(responseHandler);
