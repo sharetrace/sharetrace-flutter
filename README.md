@@ -84,7 +84,7 @@ Sharetrace支持通过标准的Scheme和Universal Links(iOS>=9)，接入Sharetra
 
 #### 4.1 开启一键调起功能
 登录Sharetrace的管理后台，找到iOS配置，开启相关功能和填入配置
-![5_apple_config_on.png](https://res.sharetrace.com/img/5_apple_config_on.png)
+![5_apple_config_on.png](https://resource.sharetrace.com/img/5_apple_config_on.png)
 
 其中Team Id可以在[Apple开发者](https://developer.apple.com/account/#/membership/)后台查看
 
@@ -94,25 +94,25 @@ Sharetrace支持通过标准的Scheme和Universal Links(iOS>=9)，接入Sharetra
 
 （这里以Xcode 12为例，其他Xcode版本类似)
 
-![5_1_domains.png](https://res.sharetrace.com/img/5_1_domains.png)
+![5_1_domains.png](https://resource.sharetrace.com/img/5_1_domains.png)
 
 在如下图所示位置填入Sharetrace后台提供的applinks
 
-![5_applinks_value.png](https://res.sharetrace.com/img/5_applinks_value.png)
+![5_applinks_value.png](https://resource.sharetrace.com/img/5_applinks_value.png)
 
 
 ##### 方法二：通过Apple开发者管理后台手动开启
 
 登录到[Apple管理后台](https://developer.apple.com/account),在Identifiers找到所需开启到App ID
 
-![5_apple_dev_config.png](https://res.sharetrace.com/img/5_apple_dev_config.png)
+![5_apple_dev_config.png](https://resource.sharetrace.com/img/5_apple_dev_config.png)
 
 
 #### 4.3 Scheme配置
 
 找到项目Info配置，填入后台分配的Scheme, 如下图:
 
-![ios_scheme_value.png](https://res.sharetrace.com/img/ios_scheme_value.png)
+![ios_scheme_value.png](https://resource.sharetrace.com/img/ios_scheme_value.png)
 
 #### 4.4 代码配置
 

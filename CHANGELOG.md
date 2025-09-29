@@ -2,7 +2,7 @@
 
 - 更新iOS SDK 2.4.2 修复在某些情况下网络请求可能出现异常的问题
 - (Flutter 2.x) iOS SDK 2.4.2
-- 
+
 ## 3.2.0
 
 - iOS SDK 去掉Bitcode
