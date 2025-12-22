@@ -41,5 +41,5 @@ repositories {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.aar'])
-    implementation 'com.sharetrace:sharetrace-android-sdk:2.1.9'
+    implementation 'com.sharetrace:sharetrace-android-sdk:2.2.1'
 }
