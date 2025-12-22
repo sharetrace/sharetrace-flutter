@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 typedef Future<dynamic> ResponseHandler(Map<String, String> data);
 
 class SharetraceFlutterPlugin {
-  static const MethodChannel _channel = const MethodChannel('sharetrace_flutter_plugin');
+  static const MethodChannel _channel = MethodChannel('sharetrace_flutter_plugin');
 
   static final SharetraceFlutterPlugin _instance = SharetraceFlutterPlugin._internal();
   SharetraceFlutterPlugin._internal() {
@@ -14,14 +14,14 @@ class SharetraceFlutterPlugin {
   }
   factory SharetraceFlutterPlugin.getInstance() => _getInstance();
 
-  static _getInstance() {
+  static SharetraceFlutterPlugin _getInstance() {
     return _instance;
   }
 
   late ResponseHandler _installRespHandler;
   late ResponseHandler _wakeupRespHandler;
 
-  Future _onMethodHandle(MethodCall call) async {
+  Future<dynamic> _onMethodHandle(MethodCall call) async {
     if (call.method == "onInstallResponse") {
       return _installRespHandler(call.arguments.cast<String, String>());
     } else if (call.method == "onWakeupResponse") {
@@ -35,9 +35,9 @@ class SharetraceFlutterPlugin {
   }
 
   void getInstallTrace(ResponseHandler responseHandler, [int timeoutSeconds = 10]) {
-    var args = new Map();
+    Map<String, dynamic> args = <String, dynamic>{};
     args["timeoutSeconds"] = timeoutSeconds.toString();
-    this._installRespHandler = responseHandler;
+    _installRespHandler = responseHandler;
     _channel.invokeMethod("getInstallTrace", args);
   }
 
